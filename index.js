@@ -39,27 +39,28 @@ app.post('/new-message', function(req, res) {
       data = response.body
       console.log('Received response from RDW: ')
       console.log(JSON.stringify(response))
-    })
-    .catch(err => {
-      console.log('Error :', err)
-      res.end('Error :' + err)
-    })
+      
+      axios
+      .post(
+        'https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage',
+        {
+          chat_id: message.chat.id,
+          //text:  JSON.stringify(data)
+          text: data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
+        }
+      )
+      .then(response => {
+        console.log('POST successfull')
+        res.end('ok')
+      })
+      .catch(err => {
+        console.log('POST failed, Error :', err)
+        res.end('Error :' + err)
+      })
 
-  axios
-    .post(
-      'https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage',
-      {
-        chat_id: message.chat.id,
-        //text:  JSON.stringify(data)
-        text: data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
-      }
-    )
-    .then(response => {
-      console.log('Message posted')
-      res.end('ok')
     })
     .catch(err => {
-      console.log('Error :', err)
+      console.log('GET failed, Error :', err)
       res.end('Error :' + err)
     })
 })
