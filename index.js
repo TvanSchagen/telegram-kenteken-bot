@@ -36,8 +36,9 @@ app.post('/new-message', function(req, res) {
       'https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=' + message.text.replace(/-/g, '').toUpperCase()
     )
     .then(response => {
-      data = response.body[0];
-      console.log(data);
+      data = response.body
+      console.log('Received response from RDW: ')
+      console.log(JSON.stringify(data))
     })
     .catch(err => {
       console.log('Error :', err)
@@ -49,8 +50,8 @@ app.post('/new-message', function(req, res) {
       'https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage',
       {
         chat_id: message.chat.id,
-        text:  JSON.stringify(data)
-        //text: data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
+        //text:  JSON.stringify(data)
+        text: data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
       }
     )
     .then(response => {
