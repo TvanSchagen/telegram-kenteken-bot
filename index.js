@@ -32,6 +32,7 @@ app.post('/new-message', function(req, res) {
         })
       .then(response => { res.end('ok') })
       .catch(err => { res.end('Error :' + err) })
+      return
   }
 
   // Request data from RDW open data
