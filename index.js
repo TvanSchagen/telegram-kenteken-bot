@@ -38,8 +38,9 @@ app.post('/new-message', function(req, res) {
     .then(response => {
       data = response.body
       console.log('Received response from RDW: ')
-      console.log(response)
-      
+      console.log(response.data)
+      data = response.data
+
       axios
       .post(
         'https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage',
