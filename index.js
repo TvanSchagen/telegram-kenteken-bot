@@ -38,7 +38,7 @@ app.post('/new-message', function(req, res) {
     .then(response => {
       data = response.body
       console.log('Received response from RDW: ')
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(response))
     })
     .catch(err => {
       console.log('Error :', err)
