@@ -39,7 +39,7 @@ app.post('/new-message', function(req, res) {
       data = response.body
       console.log('Received response from RDW: ')
       console.log(response.data)
-      data = response.data
+      data = response.data[0]
 
       axios
       .post(
