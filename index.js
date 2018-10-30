@@ -12,25 +12,35 @@ app.use(
   })
 )
 
+// API route that is called upon by the bot
 app.post('/new-message', function(req, res) {
   const { message } = req.body
 
+  var data;
+  var answer;
+
+  // Return if message is empty
   if (!message) {
     return res.end()
   }
 
+  // Return if message is not a valid kenteken regex
   if (!kenteken.check(message.text)) {
-    return res.end();
+    axios.post('https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage', {
+          chat_id: message.chat.id,
+          text: 'Dat is geen kenteken. Stuur een bericht in de vorm van een kenteken.'
+        })
+      .then(response => { res.end('ok') })
+      .catch(err => { res.end('Error :' + err) })
   }
 
-  var data;
-
+  // Request data from RDW open data
   axios
     .get(
       'https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=' + message.text.replace(/-/g, '').toUpperCase()
     )
     .then(response => {
-      // console.log(response.data)
+      // when succesful send message back
       data = response.data[0]
       answer = data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
       console.log(answer)
@@ -44,28 +54,36 @@ app.post('/new-message', function(req, res) {
         }
       )
       .then(response => {
-        console.log('POST successfull')
+        // end response when OK
         res.end('ok')
       })
       .catch(err => {
+        // log and end response when ERROR
         console.log('POST failed, Error :', err)
         res.end('Error :' + err)
       })
 
     })
     .catch(err => {
+      // log and end response when ERROR
+      axios.post('https://api.telegram.org/bot664166564:AAGyQI9Q7BBNDYr1oFJ-w4UTTh92GY3Q1mw/sendMessage', {
+        chat_id: message.chat.id,
+        text: 'Voor dit kenteken is geen informatie gevonden bij de RDW.'
+      })
+      .then(response => { res.end('ok') })
+      .catch(err => { res.end('Error :' + err) })
       console.log('GET failed, Error :', err)
       res.end('Error :' + err)
     })
 })
 
+// If available, get port from Heroku process environmental variables
 let port = process.env.PORT;
-
 if (port == null || port == "") {
   port = 3000;
 }
 
-// Finally, start our server
+// Listen for requests on designated port
 app.listen(port, function() {
-  console.log('Telegram bot listening on port 3000!')
+  console.log('Listening on port: ' + port)
 })
