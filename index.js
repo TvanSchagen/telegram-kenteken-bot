@@ -35,15 +35,22 @@ app.post('/new-message', function(req, res) {
       return
   }
 
+  var kenteken =  message.text.replace(/-/g, '').toUpperCase()
+
   // Request data from RDW open data
   axios
     .get(
-      'https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=' + message.text.replace(/-/g, '').toUpperCase()
+      'https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=' + kenteken
     )
     .then(response => {
       // when succesful send message back
       data = response.data[0]
-      answer = data.merk + ' ' + data.handelsbenaming + ', (bouwjaar: ' + data.datum_eerste_toelating.split("/").pop() + ' ) ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
+      answer =  data.merk 
+                + ' ' + data.handelsbenaming
+                + '\n Bouwjaar: ' + data.datum_eerste_toelating.split("/").pop()
+                + '\n' + data.aantal_cilinders
+                + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
+                + '\nMeer informatie: https://www.autoweek.nl/kentekencheck/' + kenteken + '/' 
       console.log(answer)
 
       axios
