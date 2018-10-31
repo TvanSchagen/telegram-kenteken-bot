@@ -43,7 +43,7 @@ app.post('/new-message', function(req, res) {
     .then(response => {
       // when succesful send message back
       data = response.data[0]
-      answer = data.merk + ' ' + data.handelsbenaming + ', ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
+      answer = data.merk + ' ' + data.handelsbenaming + ', (bouwjaar: ' + data.datum_eerste_toelating.split("/").pop() + ' ) ' + data.aantal_cilinders + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
       console.log(answer)
 
       axios
