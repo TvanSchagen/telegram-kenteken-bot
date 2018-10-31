@@ -45,10 +45,10 @@ app.post('/new-message', function(req, res) {
       data = response.data[0]
       answer =  data.merk
                 + ' ' + data.handelsbenaming
-                + '\n Bouwjaar: ' + data.datum_eerste_toelating.split("/").pop()
+                + '\nBouwjaar: ' + data.datum_eerste_toelating.split("/").pop()
                 + '\n' + data.aantal_cilinders
                 + ' cilinders, inhoud van ' + data.cilinderinhoud + 'cc'
-                + '\nMeer informatie: https://www.autoweek.nl/kentekencheck/' + message.text.replace(/-/g, '').toUpperCase() + '/' 
+                + '\n\nMeer informatie: https://www.autoweek.nl/kentekencheck/' + message.text.replace(/-/g, '').toUpperCase() + '/' 
       console.log(answer)
 
       axios
